@@ -1,3 +1,11 @@
+# Performance optimizations
+try:
+    import uvloop
+    uvloop.install()
+    print("✅ uvloop installed for better performance")
+except ImportError:
+    print("⚠️ uvloop not available, using default event loop")
+    
 import asyncio
 import logging
 from pyrogram import Client, filters
