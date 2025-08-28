@@ -27,7 +27,7 @@ def decode_file_id(encoded_id):
 
 def generate_verification_token():
     """Generate a random verification token"""
-    return ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(32)
+    return ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(32))
 
 def get_verification_expiry_text():
     """Get formatted expiry time text"""
