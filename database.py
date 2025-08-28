@@ -9,7 +9,7 @@ class Database:
         self.users = self.db.users
         self.files = self.db.files
         self.settings = self.db.settings
-        self.verifications = self.db.verifications  # Added verification collection
+        self.verifications = self.db.verifications
 
     async def add_user(self, user_id, username=None, first_name=None):
         user_data = {
@@ -49,19 +49,25 @@ class Database:
             {"$set": {"is_premium": True}}
         )
 
-    async def store_file(self, file_id, file_name, file_size, file_type, message_id):
+    async def store_file(self, file_id, file_name, file_size, file_type, message_id, channel_id=None):
         file_data = {
             "file_id": file_id,
             "file_name": file_name,
             "file_size": file_size,
             "file_type": file_type,
             "message_id": message_id,
+            "channel_id": channel_id or Config.STORAGE_CHANNEL_ID,
             "uploaded_at": datetime.now()
         }
-        await self.files.insert_one(file_data)
+        result = await self.files.insert_one(file_data)
+        return str(result.inserted_id)
 
-    async def get_file(self, file_id):
-        return await self.files.find_one({"file_id": file_id})
+    async def get_file(self, file_unique_id):
+        try:
+            from bson import ObjectId
+            return await self.files.find_one({"_id": ObjectId(file_unique_id)})
+        except:
+            return await self.files.find_one({"file_id": file_unique_id})
 
     # NEW: Verification token management with 6-hour expiration
     async def create_verification_token(self, user_id, file_id, token):
@@ -71,7 +77,7 @@ class Database:
             "file_id": file_id,
             "token": token,
             "created_at": datetime.now(),
-            "expires_at": datetime.now() + timedelta(hours=6),  # 6 hours validity
+            "expires_at": datetime.now() + timedelta(hours=6),
             "is_used": False
         }
         await self.verifications.insert_one(verification_data)
@@ -83,7 +89,7 @@ class Database:
             "user_id": user_id,
             "token": token,
             "is_used": False,
-            "expires_at": {"$gt": current_time}  # Check if token hasn't expired
+            "expires_at": {"$gt": current_time}
         })
         
         if verification:
@@ -122,4 +128,4 @@ class Database:
         return await self.settings.find_one({"type": "shortlink"})
 
 db = Database()
-      
+        
