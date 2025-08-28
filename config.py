@@ -14,7 +14,7 @@ class Config:
     SHORTLINK_API = os.getenv("SHORTLINK_API", "139ebf8c6591acc6a69db83f200f2285874dbdbf")
     
     # Storage channel (create a private channel and add bot as admin)
-    STORAGE_CHANNEL_ID = int(os.getenv("STORAGE_CHANNEL_ID", "-1002429072244"))  # Replace with your storage channel ID
+    STORAGE_CHANNEL_ID = int(os.getenv("STORAGE_CHANNEL_ID", "-1002297453351"))  # Replace with your storage channel ID
     
     # Bot settings
     FREE_LIMIT = 3
