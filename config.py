@@ -13,7 +13,11 @@ class Config:
     SHORTLINK_URL = os.getenv("SHORTLINK_URL", "https://arolinks.com")
     SHORTLINK_API = os.getenv("SHORTLINK_API", "139ebf8c6591acc6a69db83f200f2285874dbdbf")
     
+    # Storage channel (create a private channel and add bot as admin)
+    STORAGE_CHANNEL_ID = int(os.getenv("STORAGE_CHANNEL_ID", "-1002429072244"))  # Replace with your storage channel ID
+    
     # Bot settings
-    FREE_LIMIT = 3  # Free videos limit
-    PREMIUM_PRICE = 50  # Premium price in rupees
-    VERIFICATION_VALIDITY_HOURS = 6  # Verification token validity (6 hours)
+    FREE_LIMIT = 3
+    PREMIUM_PRICE = 50
+    VERIFICATION_VALIDITY_HOURS = 6
+    
