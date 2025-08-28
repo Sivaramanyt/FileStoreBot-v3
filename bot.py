@@ -5,8 +5,8 @@ from pyrogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineK
 from pyrogram.errors import UserNotParticipant, ChatAdminRequired, FloodWait
 from config import Config
 from database import db
-from shortlink import shortlink
-from helpers import *
+from utils.shortlink import shortlink
+from utils.helpers import *
 import base64
 
 # Configure logging
