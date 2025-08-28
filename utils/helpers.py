@@ -6,6 +6,7 @@ import string
 from datetime import datetime, timedelta
 
 def get_file_size(size_bytes):
+    """Convert bytes to human readable format"""
     if size_bytes == 0:
         return "0B"
     size_names = ["B", "KB", "MB", "GB", "TB"]
@@ -16,9 +17,11 @@ def get_file_size(size_bytes):
     return f"{s} {size_names[i]}"
 
 def encode_file_id(file_id):
+    """Encode file ID for URL sharing"""
     return base64.urlsafe_b64encode(file_id.encode()).decode().rstrip('=')
 
 def decode_file_id(encoded_id):
+    """Decode file ID from URL"""
     # Add padding if necessary
     padding = 4 - len(encoded_id) % 4
     if padding != 4:
@@ -31,16 +34,11 @@ def generate_verification_token():
 
 def get_verification_expiry_text():
     """Get formatted expiry time text"""
-    return "6 hours"
-
-def is_verification_expired(created_at):
-    """Check if verification token is expired (older than 6 hours)"""
-    expiry_time = created_at + timedelta(hours=6)
-    return datetime.now() > expiry_time
+    return f"{Config.VERIFICATION_VALIDITY_HOURS} hours"
 
 def get_time_remaining(created_at):
     """Get remaining time for verification in human readable format"""
-    expiry_time = created_at + timedelta(hours=6)
+    expiry_time = created_at + timedelta(hours=Config.VERIFICATION_VALIDITY_HOURS)
     remaining = expiry_time - datetime.now()
     
     if remaining.total_seconds() <= 0:
@@ -55,6 +53,7 @@ def get_time_remaining(created_at):
         return f"{minutes}m remaining"
 
 def get_start_keyboard():
+    """Get start command keyboard"""
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("📂 Upload Files", callback_data="help_upload")],
         [InlineKeyboardButton("💎 Get Premium", callback_data="premium_info"),
@@ -64,6 +63,7 @@ def get_start_keyboard():
     return keyboard
 
 def get_premium_keyboard():
+    """Create premium purchase keyboard"""
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("💳 Pay Now", callback_data="show_payment")],
         [InlineKeyboardButton("🔙 Back", callback_data="start")]
@@ -71,6 +71,7 @@ def get_premium_keyboard():
     return keyboard
 
 def get_payment_keyboard():
+    """Create payment keyboard"""
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("✅ Payment Done", callback_data="payment_done")],
         [InlineKeyboardButton("🔙 Back", callback_data="premium_info")]
@@ -78,6 +79,7 @@ def get_payment_keyboard():
     return keyboard
 
 def get_admin_keyboard():
+    """Create admin panel keyboard"""
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("📊 Bot Stats", callback_data="bot_stats")],
         [InlineKeyboardButton("📢 Broadcast", callback_data="broadcast")],
@@ -85,4 +87,4 @@ def get_admin_keyboard():
         [InlineKeyboardButton("🔄 Reset User", callback_data="reset_user")]
     ])
     return keyboard
-  
+    
